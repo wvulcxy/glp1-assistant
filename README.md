@@ -4,6 +4,10 @@
 
 GLP-1 用药助手帮助你追踪注射记录、管理用药提醒、记录体重腰围与健康指标，并提供注射部位轮换指导。所有数据保存在本地设备，**无需登录、无需后端、离线可用**。
 
+## 📲 如何使用
+
+微信小程序端已上线，产品名为 **GLPoke**——打开微信，搜索「GLPoke」即可直接使用，无需安装。
+
 ## ✨ 功能特性
 
 - 🏠 **首页仪表盘** — 下次注射倒计时、累计/本周注射次数、最新体重与腰围、BMI 摘要
@@ -21,7 +25,7 @@ glp1-assistant/          # Monorepo（本仓库）
 ├── glp1-assistant/      # Web PWA 核心（原生 HTML/CSS/JS + localStorage）
 ├── glp1-android/        # Android WebView 封装（Kotlin）
 ├── glp1-ios/            # iOS WKWebView 封装（Swift + XcodeGen）
-└── glp1-miniapp/        # 微信小程序 GLPoke（uni-app + Vue 3）
+└── glp1-miniapp/        # 微信小程序（uni-app + Vue 3）
 ```
 
 ## 🚀 快速开始
@@ -52,7 +56,7 @@ open "GLP-1用药助手.xcodeproj"
 
 > 最低 iOS 17.0，仅支持竖屏。
 
-### 微信小程序 GLPoke（glp1-miniapp）
+### 微信小程序（glp1-miniapp）
 
 1. 用 HBuilderX 导入 `glp1-miniapp`
 2. 运行到微信开发者工具；发布前在 `manifest.json` 的 `mp-weixin.appid` 填入你的小程序 AppID
@@ -79,7 +83,7 @@ open "GLP-1用药助手.xcodeproj"
 ## 📌 版本
 
 - Web / Android / iOS：v1.3
-- 微信小程序 GLPoke：v1.4
+- 微信小程序：v1.4
 
 ## 📄 许可证
 
