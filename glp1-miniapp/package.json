@@ -1,0 +1,11 @@
+{
+  "name": "glp1-miniapp",
+  "version": "1.4.0",
+  "description": "GLP-1 用药助手 · 微信小程序版",
+  "scripts": {
+    "dev:mp-weixin": "uni -p mp-weixin",
+    "build:mp-weixin": "uni build -p mp-weixin"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

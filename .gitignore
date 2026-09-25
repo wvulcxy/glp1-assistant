@@ -1,0 +1,40 @@
+# ===== 密钥 / 签名证书（绝不提交）=====
+*.jks
+*.keystore
+*.p12
+*.pem
+*.p8
+*.mobileprovision
+*.cer
+*.key
+glp1-release.jks
+
+# ===== 环境变量 / 私密配置 =====
+.env
+.env.*
+!.env.example
+local.properties
+project.private.config.json
+
+# ===== 依赖与构建产物 =====
+node_modules/
+.gradle/
+build/
+.kotlin/
+.swiftpm/
+.build/
+dist/
+unpackage/
+
+# ===== IDE / 本地工具 =====
+.idea/
+*.iml
+DerivedData/
+xcuserdata/
+*.xcuserstate
+
+# ===== 开发截图产物 =====
+screenshot-*.png
+
+# ===== 系统文件 =====
+.DS_Store

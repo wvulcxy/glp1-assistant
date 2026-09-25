@@ -1,0 +1,21 @@
+# Gradle / build
+.gradle/
+build/
+.kotlin/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# IDE
+.idea/
+*.iml
+
+# Local machine config - do not commit
+local.properties
+
+# Signing keys - NEVER commit
+*.jks
+*.keystore
+
+# OS
+.DS_Store

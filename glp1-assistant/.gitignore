@@ -1,0 +1,8 @@
+# Dependencies
+node_modules/
+
+# Dev screenshot artifacts
+screenshot-*.png
+
+# OS
+.DS_Store

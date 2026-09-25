@@ -1,0 +1,10 @@
+# Build output
+unpackage/
+dist/
+node_modules/
+
+# WeChat DevTools private config
+project.private.config.json
+
+# OS
+.DS_Store

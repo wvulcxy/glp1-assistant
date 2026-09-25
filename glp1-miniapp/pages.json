@@ -1,0 +1,94 @@
+{
+  "easycom": {
+    "autoscan": true,
+    "custom": {
+      "^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+    }
+  },
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "GLP-1 用药助手",
+        "navigationBarBackgroundColor": "#4CAF80",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/inject/inject",
+      "style": {
+        "navigationBarTitleText": "注射管理",
+        "navigationBarBackgroundColor": "#4CAF80",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/health/health",
+      "style": {
+        "navigationBarTitleText": "健康追踪",
+        "navigationBarBackgroundColor": "#4CAF80",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/sidefx/sidefx",
+      "style": {
+        "navigationBarTitleText": "副作用日志",
+        "navigationBarBackgroundColor": "#4CAF80",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/drugs/drugs",
+      "style": {
+        "navigationBarTitleText": "药品信息",
+        "navigationBarBackgroundColor": "#4CAF80",
+        "navigationBarTextStyle": "white"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "GLP-1 用药助手",
+    "navigationBarBackgroundColor": "#4CAF80",
+    "backgroundColor": "#F5F7FA"
+  },
+  "tabBar": {
+    "color": "#7F8C8D",
+    "selectedColor": "#4CAF80",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "static/tab-home.png",
+        "selectedIconPath": "static/tab-home-active.png"
+      },
+      {
+        "pagePath": "pages/inject/inject",
+        "text": "注射",
+        "iconPath": "static/tab-inject.png",
+        "selectedIconPath": "static/tab-inject-active.png"
+      },
+      {
+        "pagePath": "pages/health/health",
+        "text": "健康",
+        "iconPath": "static/tab-health.png",
+        "selectedIconPath": "static/tab-health-active.png"
+      },
+      {
+        "pagePath": "pages/sidefx/sidefx",
+        "text": "副作用",
+        "iconPath": "static/tab-sidefx.png",
+        "selectedIconPath": "static/tab-sidefx-active.png"
+      },
+      {
+        "pagePath": "pages/drugs/drugs",
+        "text": "药品",
+        "iconPath": "static/tab-drugs.png",
+        "selectedIconPath": "static/tab-drugs-active.png"
+      }
+    ]
+  }
+}

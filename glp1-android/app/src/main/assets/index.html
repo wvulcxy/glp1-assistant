@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover, maximum-scale=1.0">
+<meta name="screen-orientation" content="portrait">
+<meta name="x5-orientation" content="portrait">
+<title>GLP-1 用药助手</title>
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="GLP-1助手">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="theme-color" content="#4CAF80">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="landscape-overlay">
+  <div class="rotate-icon">📱</div>
+  <p>请竖屏使用</p>
+</div>
+<div id="app">
+  <!-- Tab navigation -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" data-tab="home">
+      <span class="nav-ico-shell"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 3l9 8.5"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></span><span class="nav-label">首页</span>
+    </button>
+    <button class="nav-btn" data-tab="inject">
+      <span class="nav-ico-shell"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5v3"/><path d="M9.5 3.5h5"/><path d="M7 8h10"/><path d="M8 8l1-1h6l1 1v1.8l-2 2.7v6.5h-4V13.5l-2-2.7V8z"/></svg></span><span class="nav-label">注射</span>
+    </button>
+    <button class="nav-btn" data-tab="health">
+      <span class="nav-ico-shell"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-6.5-4.2-8.5-8A4.6 4.6 0 0 1 12 6.5 4.6 4.6 0 0 1 20.5 12c-2 3.8-8.5 8-8.5 8z"/><path d="M4 12h3.2l1.8-3 2.5 5 1.8-3H20"/></svg></span><span class="nav-label">健康</span>
+    </button>
+    <button class="nav-btn" data-tab="sidefx">
+      <span class="nav-ico-shell"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 2.5v5.2c0 4.2-2.9 7.6-7 9.8-4.1-2.2-7-5.6-7-9.8V5.5z"/><path d="M12 8.5v4"/><path d="M12 15.8h.01"/></svg></span><span class="nav-label">副作用</span>
+    </button>
+    <button class="nav-btn" data-tab="drugs">
+      <span class="nav-ico-shell"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="9" width="16" height="6" rx="3"/><path d="M12 9v6"/></svg></span><span class="nav-label">药品</span>
+    </button>
+    <button class="nav-btn" data-tab="fun">
+      <span class="nav-ico-shell"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l1.7 4.8 4.8 1.7-4.8 1.7L12 16.5l-1.7-4.8-4.8-1.7 4.8-1.7z"/><path d="M18.5 15.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z"/></svg></span><span class="nav-label">娱乐</span>
+    </button>
+  </nav>
+
+  <!-- Home tab -->
+  <main id="tab-home" class="tab-content active">
+    <header class="app-header">
+      <h1>GLP-1 用药助手</h1>
+      <p class="subtitle">安全用药 · 健康减重</p>
+    </header>
+
+    <div class="card countdown-card" id="countdownCard">
+      <div class="card-label">⏰ 下次注射</div>
+      <div class="countdown-time" id="countdownTime">未设置用药计划</div>
+      <div class="countdown-info" id="countdownInfo"></div>
+      <button class="btn btn-primary btn-sm" id="btnRecordNow">✍️ 立即记录注射</button>
+    </div>
+
+    <div class="card stats-row">
+      <div class="stat-item">
+        <div class="stat-val" id="statTotal">0</div>
+        <div class="stat-label">累计注射</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" id="statThisWeek">0</div>
+        <div class="stat-label">本周注射</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" id="statWeight">--</div>
+        <div class="stat-label">最新体重</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" id="statWaist">--</div>
+        <div class="stat-label">最新腰围</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" id="statBMI">--</div>
+        <div class="stat-label">BMI</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">📍 下次注射部位建议</div>
+      <div class="site-suggestion" id="siteSuggestion">
+        <div class="site-icon">🔄</div>
+        <div class="site-text">请先记录一次注射</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">📅 最近注射记录</div>
+      <div class="recent-list" id="recentList">
+        <div class="empty-state">暂无注射记录</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Inject tab -->
+  <main id="tab-inject" class="tab-content">
+    <header class="app-header">
+      <h1>💉 注射管理</h1>
+    </header>
+
+    <div class="card">
+      <div class="card-label">⏰ 用药提醒设置</div>
+      <div class="form-group">
+        <label>用药频率</label>
+        <select id="freqSelect">
+          <option value="daily">每天一次</option>
+          <option value="weekly" selected>每周一次</option>
+          <option value="biweekly">每两周一次</option>
+        </select>
+      </div>
+      <div class="form-group" id="weekdayGroup">
+        <label>注射日（周几）</label>
+        <select id="weekdaySelect">
+          <option value="1">周一</option>
+          <option value="2">周二</option>
+          <option value="3">周三</option>
+          <option value="4">周四</option>
+          <option value="5">周五</option>
+          <option value="6">周六</option>
+          <option value="0">周日</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>提醒时间</label>
+        <input type="time" id="reminderTime" value="08:00">
+      </div>
+      <div class="form-group">
+        <label>选择药品</label>
+        <select id="drugSelect">
+          <option value="semaglutide_ozempic">司美格鲁肽 (Ozempic)</option>
+          <option value="semaglutide_wegovy">司美格鲁肽 (Wegovy)</option>
+          <option value="liraglutide">利拉鲁肽 (Saxenda/Victoza)</option>
+          <option value="dulaglutide">度拉糖肽 (Trulicity)</option>
+          <option value="tirzepatide">替尔泊肽 (Mounjaro)</option>
+          <option value="semaglutide_oral">司美格鲁肽口服 (Rybelsus)</option>
+          <option value="other">其他</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>剂量 (mg)</label>
+        <select id="doseInput">
+          <option value="0.25">0.25 mg</option>
+          <option value="0.5">0.5 mg</option>
+          <option value="0.75">0.75 mg</option>
+          <option value="1.0">1.0 mg</option>
+          <option value="1.25">1.25 mg</option>
+          <option value="1.5">1.5 mg</option>
+          <option value="1.75">1.75 mg</option>
+          <option value="2.0">2.0 mg</option>
+          <option value="2.4">2.4 mg</option>
+          <option value="2.5">2.5 mg</option>
+          <option value="3.0">3.0 mg</option>
+          <option value="4.0">4.0 mg</option>
+          <option value="4.5">4.5 mg</option>
+          <option value="5.0">5.0 mg</option>
+          <option value="7.5">7.5 mg</option>
+          <option value="10.0">10.0 mg</option>
+          <option value="12.5">12.5 mg</option>
+          <option value="15.0">15.0 mg</option>
+        </select>
+      </div>
+      <button class="btn btn-primary btn-full" id="btnSaveReminder">💾 保存用药计划</button>
+      <div class="notify-status" id="notifyStatus"></div>
+      <div class="catchup-hint" id="catchupHint"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">📍 注射部位轮换</div>
+      <div class="injection-map" id="injectionMap">
+        <div class="body-diagram">
+          <div class="site-zone zone-abdomen" data-zone="abdomen-ul"><span>腹部左上</span></div>
+          <div class="site-zone zone-abdomen" data-zone="abdomen-lm"><span>腹部左中</span></div>
+          <div class="site-zone zone-abdomen" data-zone="abdomen-ur"><span>腹部右上</span></div>
+          <div class="site-zone zone-abdomen" data-zone="abdomen-rm"><span>腹部右中</span></div>
+          <div class="site-zone zone-abdomen" data-zone="abdomen-ll"><span>腹部左下</span></div>
+          <div class="site-zone zone-abdomen" data-zone="abdomen-lr"><span>腹部右下</span></div>
+          <div class="site-zone zone-thigh-l" data-zone="thigh-left"><span>左大腿</span></div>
+          <div class="site-zone zone-thigh-r" data-zone="thigh-right"><span>右大腿</span></div>
+          <div class="site-zone zone-arm-l" data-zone="arm-left"><span>左上臂</span></div>
+          <div class="site-zone zone-arm-r" data-zone="arm-right"><span>右上臂</span></div>
+        </div>
+        <p class="hint">💡 点击选择本次注射部位</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">📝 手动记录注射</div>
+      <div class="form-group"><label>注射日期</label><input type="date" id="manualDate"></div>
+      <div class="form-group"><label>药品</label><select id="manualDrug">
+        <option value="semaglutide_ozempic">司美格鲁肽 (Ozempic)</option>
+        <option value="semaglutide_wegovy">司美格鲁肽 (Wegovy)</option>
+        <option value="liraglutide">利拉鲁肽 (Saxenda/Victoza)</option>
+        <option value="dulaglutide">度拉糖肽 (Trulicity)</option>
+        <option value="tirzepatide">替尔泊肽 (Mounjaro)</option>
+        <option value="semaglutide_oral">司美格鲁肽口服 (Rybelsus)</option>
+        <option value="other">其他</option>
+      </select></div>
+      <div class="form-group"><label>剂量 (mg)</label><select id="manualDose">
+        <option value="0.25">0.25 mg</option><option value="0.5" selected>0.5 mg</option>
+        <option value="0.75">0.75 mg</option><option value="1.0">1.0 mg</option>
+        <option value="1.25">1.25 mg</option><option value="1.5">1.5 mg</option>
+        <option value="1.75">1.75 mg</option><option value="2.0">2.0 mg</option>
+        <option value="2.4">2.4 mg</option><option value="2.5">2.5 mg</option>
+        <option value="3.0">3.0 mg</option><option value="4.0">4.0 mg</option>
+        <option value="4.5">4.5 mg</option><option value="5.0">5.0 mg</option>
+        <option value="7.5">7.5 mg</option><option value="10.0">10.0 mg</option>
+        <option value="12.5">12.5 mg</option><option value="15.0">15.0 mg</option>
+      </select></div>
+      <div class="form-group"><label>注射部位</label><select id="manualSite">
+        <option value="">请选择</option>
+        <option value="abdomen-ul">腹部左上</option><option value="abdomen-lm">腹部左中</option>
+        <option value="abdomen-ur">腹部右上</option><option value="abdomen-rm">腹部右中</option>
+        <option value="abdomen-ll">腹部左下</option><option value="abdomen-lr">腹部右下</option>
+        <option value="thigh-left">左大腿</option><option value="thigh-right">右大腿</option>
+        <option value="arm-left">左上臂</option><option value="arm-right">右上臂</option>
+      </select></div>
+      <div class="form-group"><label>备注</label><input type="text" id="manualNote" placeholder="选填"></div>
+      <button class="btn btn-primary btn-full" id="btnManualRecord">✅ 记录本次注射</button>
+    </div>
+
+    <div class="card">
+      <div class="card-label">📜 注射历史</div>
+      <div class="history-list" id="injectHistory"><div class="empty-state">暂无记录</div></div>
+      <button class="btn btn-danger btn-sm btn-full" id="btnClearHistory" style="margin-top:12px">🗑️ 清空历史</button>
+    </div>
+  </main>
+
+  <!-- Health tab (merged weight + waist + BMI + health indicators) -->
+  <main id="tab-health" class="tab-content">
+    <header class="app-header">
+      <h1>🧬 健康追踪</h1>
+    </header>
+
+    <!-- Sub-navigation -->
+    <div class="sub-nav" id="healthSubNav">
+      <button class="sub-nav-btn active" data-sub="weight">⚖️ 体重</button>
+      <button class="sub-nav-btn" data-sub="waist">📏 腰围</button>
+      <button class="sub-nav-btn" data-sub="indicators">🩺 指标</button>
+    </div>
+
+    <!-- Weight sub-tab -->
+    <div class="sub-tab active" id="sub-weight">
+      <!-- Height + BMI -->
+      <div class="card">
+        <div class="card-label">📐 身高 & BMI</div>
+        <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
+          <div class="form-group" style="flex:1;min-width:100px;margin-bottom:0;">
+            <label>身高 (cm)</label>
+            <input type="number" id="heightInput" step="0.1" min="100" max="250" placeholder="如 170">
+          </div>
+          <button class="btn btn-primary btn-sm" id="btnSaveHeight" style="margin-bottom:14px;">💾 保存</button>
+        </div>
+        <div class="bmi-display" id="bmiDisplay">
+          <div class="bmi-value">--</div>
+          <div class="bmi-label">BMI</div>
+          <div class="bmi-level" id="bmiLevel"></div>
+        </div>
+      </div>
+
+      <!-- Weight chart -->
+      <div class="card">
+        <div class="card-label">📊 体重变化</div>
+        <div class="chart-container" id="weightChart"><canvas id="weightCanvas"></canvas></div>
+        <div class="weight-summary" id="weightSummary">
+          <div class="ws-item"><span>起始体重</span><strong id="wsStart">-- kg</strong></div>
+          <div class="ws-item"><span>当前体重</span><strong id="wsCurrent">-- kg</strong></div>
+          <div class="ws-item"><span>已减</span><strong id="wsLost">-- kg</strong></div>
+        </div>
+      </div>
+
+      <!-- Record weight -->
+      <div class="card">
+        <div class="card-label">✍️ 记录体重</div>
+        <div class="form-group"><label>日期</label><input type="date" id="weightDate"></div>
+        <div class="form-group"><label>体重 (kg)</label><input type="number" id="weightInput" step="0.1" min="30" max="300" placeholder="如 75.5"></div>
+        <button class="btn btn-primary btn-full" id="btnWeightRecord">📝 记录体重</button>
+      </div>
+
+      <!-- Weight history -->
+      <div class="card">
+        <div class="card-label">📋 体重记录</div>
+        <div class="history-list" id="weightHistory"><div class="empty-state">暂无记录</div></div>
+      </div>
+    </div>
+
+    <!-- Waist sub-tab -->
+    <div class="sub-tab" id="sub-waist">
+      <div class="card">
+        <div class="card-label">📊 腰围变化</div>
+        <div class="chart-container" id="waistChart"><canvas id="waistCanvas"></canvas></div>
+        <div class="weight-summary" id="waistSummary">
+          <div class="ws-item"><span>起始腰围</span><strong id="wsWaistStart">-- cm</strong></div>
+          <div class="ws-item"><span>当前腰围</span><strong id="wsWaistCurrent">-- cm</strong></div>
+          <div class="ws-item"><span>已减</span><strong id="wsWaistLost">-- cm</strong></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">✍️ 记录腰围</div>
+        <div class="form-group"><label>日期</label><input type="date" id="waistDate"></div>
+        <div class="form-group"><label>腰围 (cm)</label><input type="number" id="waistInput" step="0.5" min="40" max="200" placeholder="如 85"></div>
+        <button class="btn btn-primary btn-full" id="btnWaistRecord">📝 记录腰围</button>
+      </div>
+
+      <div class="card">
+        <div class="card-label">📋 腰围记录</div>
+        <div class="history-list" id="waistHistory"><div class="empty-state">暂无记录</div></div>
+      </div>
+    </div>
+
+    <!-- Health Indicators sub-tab -->
+    <div class="sub-tab" id="sub-indicators">
+      <div class="card">
+        <div class="card-label">🩺 健康指标录入</div>
+        <div class="form-group"><label>日期</label><input type="date" id="indDate"></div>
+        <div class="form-group"><label>总胆固醇 TC (mmol/L)</label><input type="number" id="indTC" step="0.01" min="1" max="15" placeholder="如 5.2"></div>
+        <div class="form-group"><label>甘油三酯 TG (mmol/L)</label><input type="number" id="indTG" step="0.01" min="0.1" max="20" placeholder="如 1.7"></div>
+        <div class="form-group"><label>高密度脂蛋白 HDL-C (mmol/L)</label><input type="number" id="indHDL" step="0.01" min="0.1" max="5" placeholder="如 1.3"></div>
+        <div class="form-group"><label>低密度脂蛋白 LDL-C (mmol/L)</label><input type="number" id="indLDL" step="0.01" min="0.5" max="10" placeholder="如 3.1"></div>
+        <div class="form-group"><label>脂肪肝等级</label><select id="indFattyLiver">
+          <option value="">无/未检查</option>
+          <option value="none">无脂肪肝</option>
+          <option value="mild">轻度脂肪肝</option>
+          <option value="moderate">中度脂肪肝</option>
+          <option value="severe">重度脂肪肝</option>
+        </select></div>
+        <button class="btn btn-primary btn-full" id="btnIndRecord">📝 记录指标</button>
+      </div>
+
+      <div class="card">
+        <div class="card-label">📜 指标历史</div>
+        <div class="history-list" id="indHistory"><div class="empty-state">暂无记录</div></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Side Effects tab -->
+  <main id="tab-sidefx" class="tab-content">
+    <header class="app-header">
+      <h1>📋 副作用日志</h1>
+    </header>
+
+    <div class="card">
+      <div class="card-label">✍️ 记录副作用</div>
+      <div class="form-group"><label>日期</label><input type="date" id="sidefxDate"></div>
+      <div class="form-group">
+        <label>症状类型</label>
+        <div class="chip-group" id="symptomChips">
+          <button class="chip" data-symptom="nausea">🤢 恶心</button>
+          <button class="chip" data-symptom="vomiting">🤮 呕吐</button>
+          <button class="chip" data-symptom="diarrhea">💩 腹泻</button>
+          <button class="chip" data-symptom="constipation">😣 便秘</button>
+          <button class="chip" data-symptom="headache">🤕 头痛</button>
+          <button class="chip" data-symptom="fatigue">😴 疲劳</button>
+          <button class="chip" data-symptom="dizziness">😵 头晕</button>
+          <button class="chip" data-symptom="appetite_loss">🍽️ 食欲减退</button>
+          <button class="chip" data-symptom="injection_reaction">🔴 注射反应</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>严重程度</label>
+        <div class="severity-group" id="severityGroup">
+          <button class="severity-btn" data-severity="mild">轻度</button>
+          <button class="severity-btn" data-severity="moderate">中度</button>
+          <button class="severity-btn" data-severity="severe">重度</button>
+        </div>
+      </div>
+      <div class="form-group"><label>备注</label><textarea id="sidefxNote" rows="2" placeholder="选填"></textarea></div>
+      <button class="btn btn-primary btn-full" id="btnSidefxRecord">📝 记录</button>
+    </div>
+
+    <div class="card">
+      <div class="card-label">📜 副作用历史</div>
+      <div class="history-list" id="sidefxHistory"><div class="empty-state">暂无记录</div></div>
+    </div>
+  </main>
+
+  <!-- Drugs tab -->
+  <main id="tab-drugs" class="tab-content">
+    <header class="app-header">
+      <h1>💊 GLP-1 药品信息</h1>
+    </header>
+
+    <div class="drug-cards" id="drugCards"></div>
+
+    <!-- About -->
+    <div class="card about-card" style="margin-top:16px;">
+      <div class="card-label">ℹ️ 关于 GLP-1 用药助手</div>
+      <div class="about-info">
+        <div class="about-row"><span>版本</span><strong>v1.5</strong></div>
+        <div class="about-row"><span>作者</span><strong>wxy</strong></div>
+        <div class="about-row"><span>联系</span><strong>wvulcxy@users.noreply.github.com</strong></div>
+      </div>
+      </div>
+      <p class="about-desc">GLP-1 用药助手是一款面向 GLP-1 受体激动剂使用者的单机版用药管理工具，帮助追踪注射记录、体重腰围变化和健康指标。</p>
+      <p class="about-disclaimer">⚠️ 免责声明：本应用仅供参考，不构成医疗建议。用药请遵医嘱。</p>
+    </div>
+  </main>
+
+  <!-- Fun tab -->
+  <main id="tab-fun" class="tab-content">
+    <header class="app-header">
+      <h1>🎮 趣味实验室</h1>
+      <p class="subtitle">模拟打针 · 模拟点外卖</p>
+    </header>
+
+    <div class="card">
+      <div class="card-label">💉 模拟打针</div>
+      <p class="hint">练习一下注射流程，纯模拟、无痛无风险～</p>
+      <div class="sim-inject-stage">
+        <div class="inject-target"></div>
+        <div class="syringe" id="simSyringe">
+          <div class="syringe-handle"></div>
+          <div class="syringe-plunger"></div>
+          <div class="syringe-body"><div class="syringe-liquid"></div></div>
+          <div class="syringe-needle"></div>
+          <div class="syringe-cap"></div>
+        </div>
+        <div class="inject-done" id="simInjectDone">
+          <div class="inject-check">✓</div>
+          <div class="inject-done-text">模拟注射完成</div>
+        </div>
+      </div>
+      <div class="sim-status" id="simInjectStatus">准备好了，点下面按钮开始</div>
+      <div class="fun-stats">累计模拟注射 <b id="simInjectCount">0</b> 次</div>
+      <button class="btn btn-primary btn-full" id="btnSimInject">💉 开始模拟打针</button>
+    </div>
+
+    <div class="card delivery-card">
+      <div class="card-label">🛵 模拟点外卖</div>
+      <div class="delivery-loc" id="deliveryLoc">📍 定位中…</div>
+      <div class="delivery-map">
+        <svg id="deliverySvg" viewBox="0 0 320 210" preserveAspectRatio="xMidYMid slice">
+          <rect x="0" y="0" width="320" height="210" rx="18" fill="#EAF4EE"/>
+          <path class="map-road" d="M-10 70 H330 M-10 150 H330 M60 -10 V220 M200 -10 V220"/>
+          <rect class="map-block" x="86" y="18" width="84" height="38" rx="8"/>
+          <rect class="map-block" x="228" y="96" width="76" height="38" rx="8"/>
+          <rect class="map-block" x="24" y="96" width="56" height="34" rx="8"/>
+          <rect class="map-block" x="116" y="174" width="76" height="26" rx="8"/>
+          <path id="routePath" class="route" d="M34 180 C 120 158, 150 92, 286 34"/>
+          <g class="map-pin"><circle cx="34" cy="180" r="13" fill="#F59E0B" stroke="#fff" stroke-width="2.5"/><text x="34" y="185" text-anchor="middle" font-size="11" fill="#fff" font-weight="700">店</text></g>
+          <g class="map-pin"><circle cx="286" cy="34" r="13" fill="#2FAE74" stroke="#fff" stroke-width="2.5"/><text x="286" y="39" text-anchor="middle" font-size="11" fill="#fff" font-weight="700">你</text></g>
+          <g id="courierG"><circle id="courierDot" cx="34" cy="180" r="10" fill="#fff" stroke="#2FAE74" stroke-width="2.5"/><text id="courierText" x="34" y="185" text-anchor="middle" font-size="13">🛵</text></g>
+        </svg>
+      </div>
+      <div class="delivery-order" id="deliveryOrder">点击下方按钮，模拟叫一份外卖</div>
+      <div class="delivery-eta" id="deliveryEta"></div>
+      <div class="delivery-progress"><div class="delivery-progress-bar" id="deliveryBar"></div></div>
+      <div id="confettiWrap"></div>
+      <div class="fun-stats">累计模拟点餐 <b id="deliveryCount">0</b> 次</div>
+      <button class="btn btn-primary btn-full" id="btnStartDelivery">🛵 开始模拟点餐</button>
+    </div>
+  </main>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
